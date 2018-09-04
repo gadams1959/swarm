@@ -70,6 +70,8 @@ public:
      * As we use 64bit words, this value is 32.
      */
     static const size_t kValuesPerWord = sizeof( WordType ) * 8 / 2;
+    static const uint64_t IndexMask = kValuesPerWord - 1;
+    static const uint64_t IndexShift = 5;
 
     // -------------------------------------------------------------------------
     //     Constructors and Rule of Five
@@ -112,7 +114,11 @@ public:
     /**
      * @brief Get the value at a position in the vector.
      */
-    ValueType get( size_t index ) const;
+    ValueType get( size_t index ) const
+    {
+        return static_cast< ValueType >
+          ((data_[index >> IndexShift] >> ((index & IndexMask) << 1)) & 3ULL);
+    }
 
     /**
      * @brief Alias for get().
@@ -177,7 +183,12 @@ public:
     /**
      * @brief Set a value at a position in the vector.
      */
-    void set( size_t index, ValueType value );
+    void set( size_t index, ValueType value )
+    {
+        uint64_t shift = (index & IndexMask) << 1;
+        data_[index >> IndexShift] &= ~ (3ULL << shift);
+        data_[index >> IndexShift] |= static_cast< WordType >(value) << shift;
+    }
 
     /**
      * @brief Insert a value at a position.

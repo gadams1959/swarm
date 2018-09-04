@@ -87,6 +87,7 @@ size_t TwobitVector::data_size() const
     return data_.size();
 }
 
+#if 0
 TwobitVector::ValueType TwobitVector::get( size_t index ) const
 {
     if (index >= size_) {
@@ -99,6 +100,7 @@ TwobitVector::ValueType TwobitVector::get( size_t index ) const
     // Shift it to the right, so that we can cast it to a value type.
     return static_cast< ValueType >( segment >> ( 2 * ( index % kValuesPerWord )));
 }
+#endif
 
 TwobitVector::ValueType TwobitVector::operator [] ( size_t index ) const
 {
@@ -177,6 +179,7 @@ void TwobitVector::clear()
     data_.clear();
 }
 
+#if 0
 void TwobitVector::set( size_t index, TwobitVector::ValueType value )
 {
     if( index >= size_ ) {
@@ -192,6 +195,7 @@ void TwobitVector::set( size_t index, TwobitVector::ValueType value )
     data_[ index / kValuesPerWord ] &= ~ bit_mask_[ index % kValuesPerWord ];
     data_[ index / kValuesPerWord ] |= tmp;
 }
+#endif
 
 // ================================================================================================
 //     Insert
